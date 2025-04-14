@@ -6,19 +6,17 @@ import jakarta.persistence.*;
 public class Panda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int animalId;
-
+    private int id;
     private String name;
     private String description;
     private String type;
-    private double age;
 
-    public int getAnimalId() {
-        return animalId;
+
+    public int getId() {
+        return id;
     }
-
-    public void setAnimalId(int animalId) {
-        this.animalId = animalId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -45,11 +43,5 @@ public class Panda {
         this.type = type;
     }
 
-    public double getAge() {
-        return age;
-    }
 
-    public void setAge(double age) {
-        this.age = age;
-    }
 }
