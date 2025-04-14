@@ -1,19 +1,21 @@
 package edu.uncg.csc340.animal_api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import java.util.List;
-import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
 @RequestMapping("/pandas")
 public class PandaController {
 
     @Autowired
-    PandaService pandaService;
+    private PandaService pandaService;
 
     @GetMapping("/all")
     public String getAllPandas(Model model) {
@@ -22,46 +24,40 @@ public class PandaController {
     }
 
     @GetMapping("/{id}")
-    public String getPandaById(@PathVariable int id, Model model) {
-        model.addAttribute("panda", pandaService.getPandaById(id).orElse(null));
+    public String getPandaById(@PathVariable Long id, Model model) {
+        model.addAttribute("panda", pandaService.getPandaById(id));
         return "panda-details";
     }
 
-    @GetMapping("/new-form")
-    public String createPandaForm(Model model) {
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
         model.addAttribute("panda", new Panda());
         return "panda-create";
     }
 
     @PostMapping("/new")
-    public String savePanda(@ModelAttribute Panda panda) {
-        System.out.println("🧾 RECEIVED PANDA FROM FORM: " + panda);
-        pandaService.savePanda(panda);
-        return "redirect:/pandas/all";
+    public String createPanda(@ModelAttribute Panda panda) {
+        pandaService.createPanda(panda);
+        return "redirect:/pandas";
     }
 
-    @GetMapping("/update-form/{id}")
-    public String updatePandaForm(@PathVariable int id, Model model) {
-        model.addAttribute("panda", pandaService.getPandaById(id).orElse(null));
+    @GetMapping("/update/{id}")
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("panda", pandaService.getPandaById(id));
         return "panda-update";
     }
 
     @PostMapping("/update")
     public String updatePanda(@ModelAttribute Panda panda) {
-        pandaService.savePanda(panda);  // same as update
-        return "redirect:/pandas/" + panda.getId();
+        pandaService.updatePanda(panda.getId(), panda);
+        return "redirect:/pandas";
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePanda(@PathVariable int id) {
+    public String deletePanda(@PathVariable Long id) {
         pandaService.deletePanda(id);
-        return "redirect:/pandas/all";
+        return "redirect:/pandas";
     }
 
-    //Extra Credit
-    @GetMapping("/search")
-    public String searchByName(@RequestParam String name, Model model) {
-        model.addAttribute("pandaList", pandaService.getPandasByName(name));
-        return "panda-list";
-    }
+
 }
