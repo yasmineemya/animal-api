@@ -10,29 +10,52 @@ import java.util.Optional;
 public class PandaService {
 
     @Autowired
-    PandaRepository pandaRepository;
+    private PandaRepository pandaRepository;
+    private Panda updatedPanda;
 
     public List<Panda> getAllPandas() {
+
         return pandaRepository.findAll();
     }
 
-    public Optional<Panda> getPandaById(int id) {
-        return pandaRepository.findById(id);
+    public Panda getPandaById(Long id) {
+        return pandaRepository.findById(id).orElse(null);
     }
 
     public Panda savePanda(Panda panda) {
+
         return pandaRepository.save(panda);
     }
 
-    public void deletePanda(int id) {
+    public void deletePanda(Long id) {
+
         pandaRepository.deleteById(id);
     }
 
-    public List<Panda> getPandasByType(String type) {
+    public List<Panda> getPandaByType(String type) {
+
         return pandaRepository.findByType(type);
     }
 
-    public List<Panda> getPandasByName(String name) {
+    public List<Panda> getPandaByName(String name) {
+
         return pandaRepository.findByNameContaining(name);
     }
+
+    public void createPanda(Panda panda) {
+        pandaRepository.save(panda);
+    }
+
+
+    public void updatePanda(Long id, Panda updatedPanda) {
+        Panda panda = getPandaById(id);
+        if (panda != null) {
+            panda.setName(updatedPanda.getName());
+            panda.setType(updatedPanda.getType());
+            panda.setDescription(updatedPanda.getDescription());
+            pandaRepository.save(panda);
+        }
+    }
+
+
 }

@@ -3,7 +3,7 @@
 <head><title>Panda List</title></head>
 <body>
 <h1>All Pandas</h1>
-<a href="/pandas/new-form">Create New Panda</a>
+<a href="/pandas/new">Create New Panda</a>
 <table border="1">
     <tr>
         <th>ID</th>
@@ -28,3 +28,5 @@
 </table>
 </body>
 </html>
+
+
